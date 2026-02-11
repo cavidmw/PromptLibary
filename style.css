@@ -1,0 +1,516 @@
+:root{
+  --bg1:#02030a;
+  --bg2:#020615;
+  --bg3:#050b22;
+
+  --glass: rgba(255,255,255,0.08);
+  --glass2: rgba(255,255,255,0.10);
+  --glassBorder: rgba(255,255,255,0.16);
+
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.62);
+
+  --shadow: 0 20px 70px rgba(0,0,0,0.55);
+  --shadowSoft: 0 12px 40px rgba(0,0,0,0.45);
+
+  --radius: 18px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  overflow-x:hidden;
+
+  background:
+    radial-gradient(1200px 600px at 20% 15%, rgba(80,120,255,0.10), transparent 55%),
+    radial-gradient(1000px 600px at 80% 25%, rgba(0,255,210,0.06), transparent 55%),
+    radial-gradient(1100px 700px at 50% 95%, rgba(150,90,255,0.08), transparent 60%),
+    linear-gradient(180deg, var(--bg2), var(--bg1) 45%, var(--bg3));
+}
+
+/* Stars */
+#starsLayer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.star{
+  position:absolute;
+  width:2px;height:2px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.9);
+  filter: drop-shadow(0 0 8px rgba(120,200,255,0.45));
+  opacity:0.0;
+  transform: translate3d(0,0,0);
+  animation:
+    starFloat var(--floatDur) ease-in-out infinite alternate,
+    starTwinkle var(--twinkleDur) ease-in-out infinite;
+}
+@keyframes starTwinkle{
+  0%{ opacity: 0.05; }
+  35%{ opacity: 0.65; }
+  70%{ opacity: 0.15; }
+  100%{ opacity: 0.45; }
+}
+@keyframes starFloat{
+  from{ transform: translate3d(0,0,0); }
+  to{ transform: translate3d(var(--dx), var(--dy), 0); }
+}
+
+/* Boot / Loading */
+.boot{
+  position:fixed;
+  inset:0;
+  z-index: 80;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(14px);
+  transition: opacity .35s ease, visibility .35s ease;
+}
+.boot.hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.bootCard{
+  width:min(520px, calc(100vw - 34px));
+  padding: 18px 18px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: var(--shadow);
+  display:flex;
+  gap:14px;
+  align-items:center;
+  transform-origin: 50% 60%;
+  animation: bootPop .45s ease;
+}
+@keyframes bootPop{
+  from{ transform: translateY(10px) scale(.97); opacity:0; }
+  to{ transform: translateY(0) scale(1); opacity:1; }
+}
+.bootIcon{
+  width: 46px;
+  height: 46px;
+  position:relative;
+}
+.bootIcon .orb{
+  position:absolute; inset:0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.92), rgba(80,120,255,0.55));
+  box-shadow: 0 0 18px rgba(110,180,255,0.35);
+}
+.bootIcon .ring{
+  position:absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.16);
+  border-top-color: rgba(0,255,210,0.55);
+  border-right-color: rgba(150,90,255,0.45);
+  animation: spin 1.05s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+.bootTitle{
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.bootSub{
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+}
+
+/* Shell */
+.shell{
+  position:relative;
+  z-index:1;
+  min-height:100%;
+  padding: 22px 18px 60px;
+}
+.topbar{
+  max-width: 1200px;
+  margin: 0 auto 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 22px;
+  padding: 16px 18px;
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadowSoft);
+}
+
+.brand{ display:flex; align-items:center; gap:12px; min-width: 240px; }
+.brandLogo{
+  width: 55px;
+  height: 40px;
+  filter: drop-shadow(0 0 14px rgba(255, 4, 4, 0.22));
+  transform: translateY(3px);
+}
+.brandTitle{ font-size: 16px; font-weight: 600; letter-spacing: 0.3px; }
+.brandSub{ font-size: 12px; color: rgba(172, 188, 255, 0.6); margin-top:2px; }
+
+.topActions{ display:flex; align-items:center; gap:10px; }
+
+.btnPrimary{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  border:none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+  transition: transform .20s ease, background .20s ease, border-color .20s ease, opacity .20s ease;
+  white-space: nowrap;
+}
+.btnPrimary:hover{
+  transform: translateY(-3px) scale(1.04);
+  background: rgba(71, 123, 255, 0.135);
+  border-color: rgba(255,255,255,0.20);
+}
+.btnPrimary:disabled{
+  opacity: 0.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btnPlus{ font-weight: 800; font-size: 16px; line-height: 1; }
+
+/* Stage */
+.stage{ max-width: 1200px; margin: 0 auto; padding: 6px 0 0; }
+.statusLine{
+  min-height: 18px;
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  justify-content:center;
+}
+@media (max-width: 1180px){ .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 880px){ .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px){
+  .grid{ grid-template-columns: 1fr; }
+  .brandSub{ display:none; }
+}
+
+/* Card */
+.card{
+  position:relative;
+  border-radius: var(--radius);
+  padding: 18px 16px 44px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadowSoft);
+  transition: transform .22s ease, background .22s ease, border-color .22s ease;
+  overflow:hidden;
+  min-height: 138px;
+}
+.card:hover{
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.22);
+}
+
+.cardTitle{
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  padding-right: 124px; /* sağdaki ikonlar için */
+  margin: 0 0 10px;
+}
+.cardMeta{
+  font-size: 12px;
+  color: rgba(255,255,255,0.60);
+  line-height: 1.35;
+  max-height: 52px;
+  overflow:hidden;
+}
+
+/* Top hover icons */
+.cardActionsTop{
+  position:absolute;
+  top: 12px;
+  right: 12px;
+  display:flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.card:hover .cardActionsTop{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iconGlassBtn{
+  width: 32px;height: 32px;
+  display:grid; place-items:center;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  cursor:pointer;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .22s ease;
+  color: rgba(255,255,255,0.92);
+}
+.iconGlassBtn:hover{
+  transform: translateY(-1px) scale(1.03);
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.24);
+  box-shadow: 0 0 0 6px rgba(80,120,255,0.07);
+}
+.iconGlassBtn svg{ width:18px;height:18px; opacity:0.92; }
+
+/* Pin glow state (JS bunu ekleyecek: .pinned) */
+.card.pinned{
+  border-color: rgba(30, 0, 255, 0.22);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.45),
+    0 0 0 6px rgba(10, 42, 253, 0.057);
+}
+
+/* Delete icon bottom-left */
+.cardDelete{ position:absolute; left: 12px; bottom: 12px; opacity: 0.92; }
+
+/* Doc info bottom-right */
+.cardDocInfo{
+  position:absolute;
+  right: 12px;
+  bottom: 12px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+}
+
+/* Refresh bar (floating small) */
+.refreshBar{
+  z-index: 50;
+  display:none;
+  padding: 10px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px);
+}
+.refreshBar.floating{
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(860px, calc(100vw - 28px));
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.refreshBarInner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+.refreshTitle{
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+.refreshSub{ display:none; }
+.refreshRight{ display:flex; align-items:center; gap: 10px; }
+
+.btnPrimarySmall{
+  display:inline-flex;
+  align-items:center;
+  cursor:pointer;
+  border:none;
+  padding: 9px 11px;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+  transition: transform .20s ease, background .20s ease, border-color .20s ease;
+  white-space: nowrap;
+}
+.btnPrimarySmall:hover{
+  transform: translateY(-1px) scale(1.02);
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.20);
+}
+.iconBtnDark{
+  width: 34px;height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.90);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition: transform .18s ease, background .18s ease;
+}
+.iconBtnDark:hover{
+  transform: scale(1.03);
+  background: rgba(255,255,255,0.12);
+}
+
+/* Modal backdrop */
+.backdrop{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding: 18px;
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(12px);
+  z-index: 20;
+  animation: fadeIn .20s ease;
+}
+@keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+
+/* Glass modal */
+.modal{
+  width: min(760px, 94vw);
+  border-radius: 22px;
+  padding: 18px;
+  transform-origin: 50% 55%;
+  animation: popIn .22s ease;
+}
+@keyframes popIn{
+  from{ transform: translateY(10px) scale(.97); opacity:0; }
+  to{ transform: translateY(0) scale(1); opacity:1; }
+}
+.glassModal{
+  background: rgba(20, 26, 48, 0.62);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.modalTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom: 10px;
+}
+.modalTitle{
+  font-weight: 750;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.iconBtnDark2{
+  width: 38px;height: 38px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.92);
+  cursor:pointer;
+  display:grid; place-items:center;
+  transition: transform .18s ease, background .18s ease;
+}
+.iconBtnDark2:hover{ transform: scale(1.03); background: rgba(255,255,255,0.12); }
+
+.fieldLabel{
+  display:block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.70);
+  margin: 10px 0 6px;
+}
+.fieldInput{
+  width:100%;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 12px 12px;
+  outline:none;
+  font-size: 14px;
+}
+.darkField{
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+}
+.darkField::placeholder{
+  color: rgba(255,255,255,0.45);
+}
+
+.modalActions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top: 14px;
+}
+
+.btnGhostDark2{
+  cursor:pointer;
+  border:none;
+  padding: 11px 14px;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.90);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: transform .18s ease, background .18s ease;
+}
+.btnGhostDark2:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.12); }
+
+.btnNeon {
+  cursor: pointer;
+  /* Kenarlık çok ince ve hafif şeffaf olmalı */
+  border: 1px solid rgba(255, 255, 255, 0.15); 
+  padding: 12px 28px;
+  border-radius: 12px;
+  color: #ffffff;
+  /* Arka planı tamamen opak yapmak yerine çok hafif renkli ve şeffaf yapıyoruz */
+  background: linear-gradient(135deg, rgba(0, 255, 210, 0.1), rgba(80, 120, 255, 0.1));
+  /* İşte sihirli dokunuş: Arkadaki yıldızları bulanıklaştırır */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  /* Gölgeyi abartmadan derinlik katıyoruz */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.btnNeon:hover {
+  /* Üzerine gelince renk biraz daha belirginleşir ve dışa doğru parlar */
+  background: linear-gradient(135deg, rgba(0, 255, 210, 0.2), rgba(80, 120, 255, 0.2));
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 210, 0.25); 
+  transform: translateY(-2px) scale(1.02);
+}
+.modalHint{
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+}
+
+/* Modal close animation (JS class ekleyecek: closing) */
+.backdrop.closing .modal{
+  animation: popOut .18s ease forwards;
+}
+@keyframes popOut{
+  from{ transform: translateY(0) scale(1); opacity:1; }
+  to{ transform: translateY(10px) scale(.98); opacity:0; }
+}
